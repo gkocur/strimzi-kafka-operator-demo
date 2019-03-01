@@ -1,0 +1,48 @@
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: Kafka
+metadata:
+  name: _cluster-name_
+spec:
+  kafka:
+    rack:
+      topologyKey: failure-domain.beta.kubernetes.io/zone
+    metrics:
+      lowercaseOutputName: true
+      lowercaseOutputLabelNames: true
+    jvmOptions:
+      "-Xmx": "1g"
+      "-Xms": "1g"
+    replicas: 3
+    listeners:
+      plain: {}
+      tls: {}
+      external:
+        authentication:
+          type: scram-sha-512
+        tls: true
+        type: loadbalancer
+    config:
+      offsets.topic.replication.factor: 3
+      transaction.state.log.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      default.replication.factor: 3
+      min.insync.replicas: 2
+      group.initial.rebalance.delay.ms: 3000
+      delete.topic.enable: true
+    storage:
+      type: persistent-claim
+      size: 10Gi
+      deleteClaim: false
+  zookeeper:
+    metrics:
+      lowercaseOutputName: true
+      lowercaseOutputLabelNames: true
+    replicas: 3
+    storage:
+      type: persistent-claim
+      size: 5Gi
+      deleteClaim: false
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}
+

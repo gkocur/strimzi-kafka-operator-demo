@@ -1,0 +1,12 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: _cluster-name_
+  labels:
+    metrics: enabled
+spec:
+  selector:
+    matchLabels:
+      strimzi.io/name: _cluster-name_-kafka-bootstrap
+  endpoints:
+  - port: metrics
